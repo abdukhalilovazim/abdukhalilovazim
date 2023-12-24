@@ -1,5 +1,10 @@
-<p align="left"> <img src="https://komarev.com/ghpvc/?username=abdukhalilovazim&label=Profile%20views&color=0e75b6&style=flat" alt="abdukhalilovazim" /> </p>
 
+<p>
+  <img src="https://komarev.com/ghpvc/?username=abdukhalilovazim&style=flat-square" alt="Profile Visits"> 
+  <a href="https://github.com/abdukhalilovazim" target="_blank">
+    <img alt="Follow on GitHub" src="https://img.shields.io/github/followers/abdukhalilovazim?label=Follow&style=social">
+  </a>
+</p>
 
 ### My contributions
 
