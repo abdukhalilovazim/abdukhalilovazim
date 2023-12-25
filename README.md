@@ -6,24 +6,6 @@
   </a>
 </p>
 
-### My contributions
-
-[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com?user=abdukhalilovazim&theme=react)](https://git.io/streak-stats)
-
-<br/>
-
-### My stats
-
-[![abdukhalilovazim's github stats](https://github-readme-stats.vercel.app/api?username=abdukhalilovazim&show_icons=true&theme=react)](https://github.com/abdukhalilovazim/github-readme-stats) <br/><br/>
-
-
-### Most used languages
-
-![ ](https://github-readme-stats.vercel.app/api/top-langs/?username=abdukhalilovazim&show_icons=true&theme=react)
-
-
-
-
 ### My Skills:
 
 <!-- Single Row with Icons and Links -->
