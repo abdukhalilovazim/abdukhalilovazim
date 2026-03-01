@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP Backend Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Epilogue:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05080f;
+            --surface: #090e1a;
+            --card: #0c1220;
+            --card2: #101828;
+            --border: #1a2640;
+            --border2: #243352;
+            --accent: #ff6b35;
+            --blue: #3b82f6;
+            --green: #22c55e;
+            --text: #e2e8f0;
+            --muted: #475569;
+            --sub: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Epilogue', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .bg-orb {
+            position: fixed; border-radius: 50%;
+            filter: blur(120px); pointer-events: none; z-index: 0;
+            animation: orb-float 10s ease-in-out infinite alternate;
+        }
+        .bg-orb-1 { width: 600px; height: 600px; background: rgba(255,107,53,0.06); top: -200px; left: -200px; }
+        .bg-orb-2 { width: 500px; height: 500px; background: rgba(59,130,246,0.05); bottom: 10%; right: -150px; animation-delay: -5s; }
+
+        @keyframes orb-float {
+            from { transform: translate(0,0); }
+            to   { transform: translate(40px, 30px); }
+        }
+
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(26,38,64,0.35) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26,38,64,0.35) 1px, transparent 1px);
+            background-size: 80px 80px;
+            z-index: 0; pointer-events: none;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; width: 100%;
+            z-index: 100; padding: 1rem 4rem;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(26,38,64,0.8);
+            backdrop-filter: blur(24px);
+            background: rgba(5,8,15,0.85);
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .logo-bracket { color: var(--muted); }
+        .logo-name { color: var(--accent); font-weight: 700; }
+        .logo-php { font-size: 0.7rem; background: rgba(255,107,53,0.12); border: 1px solid rgba(255,107,53,0.25); color: var(--accent); padding: 0.15rem 0.5rem; border-radius: 3px; }
+
+        .nav-right { display: flex; align-items: center; gap: 2rem; }
+
+        nav ul { list-style: none; display: flex; gap: 2rem; }
+        nav a {
+            color: var(--muted); text-decoration: none;
+            font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase;
+            font-weight: 600; transition: color 0.25s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        nav a:hover { color: var(--accent); }
+
+        /* LANGUAGE SWITCHER */
+        .lang-switcher {
+            display: flex;
+            gap: 0.2rem;
+            background: rgba(26,38,64,0.5);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            padding: 0.2rem;
+        }
+
+        .lang-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 0.35rem 0.7rem;
+            border-radius: 5px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover { color: var(--text); }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        section { position: relative; z-index: 2; }
+
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 6rem 3rem; }
+
+        .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem; color: var(--accent);
+            letter-spacing: 0.2em; text-transform: uppercase;
+            margin-bottom: 0.6rem;
+            display: flex; align-items: center; gap: 0.6rem;
+        }
+        .label::before { content: '//'; color: var(--muted); }
+
+        h2.sec-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900; letter-spacing: -0.03em;
+            line-height: 1.05; margin-bottom: 3rem;
+        }
+
+        /* HERO */
+        #hero {
+            min-height: 100vh;
+            display: grid; grid-template-columns: 1fr 1fr;
+            align-items: center; gap: 4rem;
+            max-width: 1100px; margin: 0 auto;
+            padding: 8rem 3rem 4rem;
+            position: relative; z-index: 2;
+        }
+
+        .hero-name {
+            font-size: clamp(2.8rem, 5vw, 5rem);
+            font-weight: 900; line-height: 1.0;
+            letter-spacing: -0.04em; margin-bottom: 0.8rem;
+            animation: fadeUp 0.5s 0.1s ease both;
+        }
+        .hero-name em { font-style: normal; color: var(--accent); }
+
+        .hero-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem; color: var(--muted);
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.5s 0.15s ease both;
+        }
+        .hero-role .hl { color: var(--blue); }
+
+        .hero-desc {
+            color: var(--sub); line-height: 1.85;
+            font-size: 1.05rem; margin-bottom: 2rem;
+            animation: fadeUp 0.5s 0.2s ease both;
+        }
+
+        .hero-socials {
+            display: flex; gap: 0.8rem; flex-wrap: wrap;
+            animation: fadeUp 0.5s 0.25s ease both;
+        }
+        .soc-link {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.55rem 1rem;
+            border: 1px solid var(--border2); border-radius: 6px;
+            text-decoration: none; color: var(--sub);
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            transition: all 0.25s;
+        }
+        .soc-link:hover { border-color: rgba(255,107,53,0.4); color: var(--accent); transform: translateY(-2px); background: rgba(255,107,53,0.05); }
+
+        /* CODE BLOCK */
+        .hero-code {
+            background: var(--card); border: 1px solid var(--border2);
+            border-radius: 14px; overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            animation: fadeUp 0.6s 0.3s ease both;
+        }
+        .code-topbar {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.8rem 1.2rem;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid var(--border);
+        }
+        .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .d-red{background:#ff5f57} .d-yellow{background:#febc2e} .d-green{background:#28c840}
+        .code-fname { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+
+        pre {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem; line-height: 1.8;
+            overflow-x: auto; color: var(--sub);
+        }
+        .c-purple{color:#c792ea} .c-blue{color:#82aaff} .c-green-c{color:#c3e88d}
+        .c-orange{color:var(--accent)} .c-muted-c{color:var(--muted)} .c-yellow{color:#ffcb6b} .c-white{color:#eeffff}
+
+        /* STATS */
+        .stats-bar { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--surface); position: relative; z-index: 2; }
+        .stats-inner { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+        .stat { text-align: center; padding: 0 1rem; }
+        .stat + .stat { border-left: 1px solid var(--border); }
+        .stat-n { font-size: 2.8rem; font-weight: 900; color: var(--accent); font-family: 'JetBrains Mono', monospace; letter-spacing: -0.05em; display: block; line-height: 1; margin-bottom: 0.4rem; }
+        .stat-l { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; }
+
+        /* EXPERIENCE */
+        #experience { background: linear-gradient(180deg, transparent, rgba(255,107,53,0.02) 50%, transparent); }
+        .exp-block { display: grid; grid-template-columns: 220px 1fr; gap: 0; }
+        .exp-timeline { border-right: 1px solid var(--border); padding-right: 2.5rem; padding-top: 0.5rem; }
+        .timeline-company { font-size: 1.4rem; font-weight: 900; color: var(--accent); margin-bottom: 0.3rem; }
+        .timeline-date { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted); margin-bottom: 0.8rem; }
+        .timeline-badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.25rem 0.6rem; background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.2); color: var(--accent); border-radius: 3px; }
+        .exp-content { padding-left: 2.5rem; }
+        .exp-role-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem; }
+        .exp-items { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.8rem; }
+        .exp-items li { display: flex; gap: 0.8rem; align-items: flex-start; color: var(--sub); font-size: 0.95rem; line-height: 1.6; }
+        .exp-items li::before { content: '▸'; color: var(--accent); flex-shrink: 0; margin-top: 0.1rem; }
+        .exp-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .tech-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 0.3rem 0.8rem; border-radius: 4px; background: rgba(26,38,64,0.6); color: var(--sub); border: 1px solid var(--border2); transition: all 0.2s; }
+        .tech-tag:hover { background: rgba(255,107,53,0.1); border-color: rgba(255,107,53,0.3); color: var(--accent); }
+
+        /* PROJECTS */
+        #projects { border-top: 1px solid var(--border); }
+        .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+        .proj-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.8rem 2rem; position: relative; transition: all 0.3s; overflow: hidden; }
+        .proj-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0; transition: opacity 0.3s; }
+        .proj-card:hover { border-color: rgba(255,107,53,0.25); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+        .proj-card:hover::before { opacity: 1; }
+        .proj-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-bottom: 1rem; letter-spacing: 0.15em; }
+        .proj-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.6rem; }
+        .proj-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1.5rem; }
+        .proj-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .stack-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.2rem 0.6rem; border-radius: 3px; background: rgba(59,130,246,0.08); color: #60a5fa; border: 1px solid rgba(59,130,246,0.15); }
+
+        /* SKILLS */
+        #skills { border-top: 1px solid var(--border); background: var(--surface); }
+        .skills-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: start; }
+        .skills-intro p { color: var(--sub); line-height: 1.8; font-size: 0.95rem; }
+        .skills-groups { display: flex; flex-direction: column; gap: 1.5rem; }
+        .sg { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem 1.6rem; }
+        .sg-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; }
+        .sg-icon { width: 24px; height: 24px; border-radius: 5px; background: rgba(255,107,53,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+        .sg-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .chip { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; padding: 0.35rem 0.75rem; border-radius: 4px; background: rgba(26,38,64,0.7); color: var(--sub); border: 1px solid var(--border2); transition: all 0.2s; cursor: default; }
+        .chip:hover { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.25); color: var(--accent); transform: translateY(-1px); }
+
+        /* CONTACT */
+        #contact { border-top: 1px solid var(--border); }
+        .contact-inner { max-width: 600px; }
+        .contact-inner p { color: var(--sub); line-height: 1.8; margin-bottom: 2.5rem; font-size: 1rem; }
+        .soc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+        .soc-card { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text); transition: all 0.3s; }
+        .soc-card:hover { border-color: rgba(255,107,53,0.3); transform: translateY(-3px); background: var(--card2); }
+        .soc-card-icon { width: 40px; height: 40px; border-radius: 9px; background: rgba(26,38,64,0.8); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; border: 1px solid var(--border2); flex-shrink: 0; }
+        .soc-card-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); display: block; letter-spacing: 0.1em; text-transform: uppercase; }
+        .soc-card-val { font-size: 0.9rem; font-weight: 700; margin-top: 0.1rem; }
+
+        /* FOOTER */
+        .footer-bar { border-top: 1px solid var(--border); position: relative; z-index: 2; }
+        .footer-inner { max-width: 1100px; margin: 0 auto; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted); }
+
+        /* LANG TRANSITION */
+        [data-i18n] { transition: opacity 0.15s ease; }
+        .lang-fade { opacity: 0; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+        .reveal.on { opacity: 1; transform: translateY(0); }
+        .reveal.d1 { transition-delay: 0.08s; }
+        .reveal.d2 { transition-delay: 0.16s; }
+        .reveal.d3 { transition-delay: 0.24s; }
+
+        @media (max-width: 900px) {
+            #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 3rem; }
+            .hero-code { display: none; }
+            .stats-inner { grid-template-columns: repeat(2,1fr); }
+            .exp-block { grid-template-columns: 1fr; }
+            .exp-timeline { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+            .proj-grid { grid-template-columns: 1fr; }
+            .skills-layout { grid-template-columns: 1fr; gap: 2rem; }
+            .soc-grid { grid-template-columns: 1fr; }
+            nav { padding: 1rem 1.5rem; }
+            nav ul { display: none; }
+            .wrap { padding: 4rem 1.5rem; }
+            .footer-inner { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+            .nav-right { gap: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+
+<!-- NAV -->
+<nav>
+    <div class="logo">
+        <span class="logo-bracket">{</span>
+        <span class="logo-name">dev</span>
+        <span class="logo-bracket">}</span>
+        <span class="logo-php">PHP</span>
+    </div>
+    <div class="nav-right">
+        <ul>
+            <li><a href="#experience" data-i18n="nav.experience">Experience</a></li>
+            <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
+            <li><a href="#skills" data-i18n="nav.skills">Stack</a></li>
+            <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+        <div class="lang-switcher">
+            <button class="lang-btn active" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" onclick="setLang('uz')">UZ</button>
+            <button class="lang-btn" onclick="setLang('ru')">RU</button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero-s" style="position:relative;z-index:2;">
+    <div id="hero">
+        <div class="hero-left">
+            <h1 class="hero-name">Azim<br><em>Abdukhalilov</em></h1>
+            <p class="hero-role"><span class="hl">PHP</span> Backend Developer · Samarkand</p>
+            <p class="hero-desc" data-i18n="hero.desc">
+                Working at TEZPAY payment platform for 3+ years. Experienced in backend systems, API architecture and fintech.
+            </p>
+            <div class="hero-socials">
+                <a href="https://github.com/abdukhalilovazim" class="soc-link" target="_blank">⚙️ GitHub</a>
+                <a href="https://t.me/abdukhalilovazim" target="_blank" class="soc-link">✈️ Telegram</a>
+                <a href="https://linkedin.com/in/abdukhalilovazim" target="_blank"  class="soc-link">💼 LinkedIn</a>
+            </div>
+        </div>
+
+        <div class="hero-code">
+            <div class="code-topbar">
+                <span class="code-dot d-red"></span>
+                <span class="code-dot d-yellow"></span>
+                <span class="code-dot d-green"></span>
+                <span class="code-fname">Developer.php</span>
+            </div>
+            <pre><span class="c-purple">class</span> <span class="c-blue">Developer</span> <span class="c-white">{</span>
+
+  <span class="c-purple">public string</span> <span class="c-orange">$name</span>       = <span class="c-green-c">"Abdukhalilov Azim"</span>;
+  <span class="c-purple">public string</span> <span class="c-orange">$role</span>       = <span class="c-green-c">"Backend Developer"</span>;
+  <span class="c-purple">public int</span>    <span class="c-orange">$experience</span> = <span class="c-yellow">3</span>;
+  <span class="c-purple">public string</span> <span class="c-orange">$location</span>   = <span class="c-green-c">"Samarkand 🇺🇿"</span>;
+
+  <span class="c-purple">public array</span> <span class="c-orange">$stack</span> = [
+    <span class="c-green-c">"PHP"</span>, <span class="c-green-c">"Laravel"</span>,
+    <span class="c-green-c">"MySQL"</span>, <span class="c-green-c">"Redis"</span>, <span class="c-green-c">"PgSQL</span>,
+    <span class="c-green-c">"Docker"</span>, <span class="c-green-c">"REST API"</span>, <span class="c-green-c">"SOAP"</span>,
+  ];
+
+  <span class="c-purple">public function</span> <span class="c-blue">currentJob</span><span class="c-white">():</span> <span class="c-purple">string</span>
+  <span class="c-white">{</span>
+    <span class="c-purple">return</span> <span class="c-green-c">"TEZPAY — 2024–present"</span>;
+  <span class="c-white">}</span>
+<span class="c-white">}</span></pre>
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+    <div class="stats-inner">
+        <div class="stat reveal">
+            <span class="stat-n">3+</span>
+            <span class="stat-l" data-i18n="stats.experience">Years exp.</span>
+        </div>
+        <div class="stat reveal d1">
+            <span class="stat-n">1M+</span>
+            <span class="stat-l" data-i18n="stats.transactions">Transactions</span>
+        </div>
+        <div class="stat reveal d2">
+            <span class="stat-n">20+</span>
+            <span class="stat-l" data-i18n="stats.projects">Projects</span>
+        </div>
+        <div class="stat reveal d3">
+            <span class="stat-n">99%</span>
+            <span class="stat-l" data-i18n="stats.uptime">Uptime</span>
+        </div>
+    </div>
+</div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+    <div class="wrap">
+        <p class="label reveal" data-i18n="exp.label">Work Experience</p>
+        <h2 class="sec-title reveal" data-i18n="exp.title">Where I've worked</h2>
+        <div class="exp-block">
+            <div class="exp-timeline reveal">
+                <div class="timeline-company">TEZPAY</div>
+                <div class="timeline-date" data-i18n="exp.date">2024 — Present</div>
+                <span class="timeline-badge" data-i18n="exp.badge">3+ years</span>
+            </div>
+            <div class="exp-content reveal d1">
+                <div class="exp-role-title" data-i18n="exp.role">Backend Developer</div>
+                <ul class="exp-items">
+                    <li data-i18n="exp.item1">Designed and deployed high-performance payment APIs handling millions of daily transactions</li>
+                    <li data-i18n="exp.item2">Built and optimized Laravel-based microservice architecture</li>
+                    <li data-i18n="exp.item3">Implemented Redis cache and queue systems, significantly improving API response times</li>
+                    <li data-i18n="exp.item4">Integrated third-party payment systems — banks and mobile operators</li>
+                    <li data-i18n="exp.item5">Optimized MySQL database performance and indexing strategies</li>
+                    <li data-i18n="exp.item6">Automated deployment pipeline with Docker and CI/CD</li>
+                </ul>
+                <div class="exp-tech">
+                    <span class="tech-tag">PHP 8</span><span class="tech-tag">Laravel</span>
+                    <span class="tech-tag">MySQL</span><span class="tech-tag">Redis</span>
+                    <span class="tech-tag">Docker</span><span class="tech-tag">REST API</span>
+                    <span class="tech-tag">Nginx</span><span class="tech-tag">Linux</span>
+                    <span class="tech-tag">Webhook</span><span class="tech-tag">Queue / Jobs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+    <div class="wrap">
+        <p class="label reveal" data-i18n="proj.label">Projects</p>
+        <h2 class="sec-title reveal" data-i18n="proj.title">What I've built</h2>
+        <div class="proj-grid">
+            <div class="proj-card reveal">
+                <div class="proj-num">Project / 01</div>
+                <div class="proj-name" data-i18n="proj.p1.name">Payment Gateway</div>
+                <p class="proj-desc" data-i18n="proj.p1.desc">Multi-currency payment processing API with webhook support, retry queue and transaction logging.</p>
+                <div class="proj-stack">
+                    <span class="stack-tag">Laravel</span><span class="stack-tag">MySQL</span>
+                    <span class="stack-tag">Redis</span><span class="stack-tag">Queue</span>
+                </div>
+            </div>
+            <div class="proj-card reveal d1">
+                <div class="proj-num">Project / 02</div>
+                <div class="proj-name" data-i18n="proj.p2.name">Admin Panel + CRM</div>
+                <p class="proj-desc" data-i18n="proj.p2.desc">Full-featured admin panel for managing clients, payments and reports with role-based access control.</p>
+                <div class="proj-stack">
+                    <span class="stack-tag">Laravel</span><span class="stack-tag">MySQL</span>
+                </div>
+            </div>
+            <div class="proj-card reveal d1">
+                <div class="proj-num">Project / 03</div>
+                <div class="proj-name" data-i18n="proj.p3.name">Telegram Bot Backend</div>
+                <p class="proj-desc" data-i18n="proj.p3.desc">Full backend API for a Telegram bot handling payments and notifications via webhooks.</p>
+                <div class="proj-stack">
+                    <span class="stack-tag">PHP</span><span class="stack-tag">Telegram API</span><span class="stack-tag">MySQL</span>
+                </div>
+            </div>
+            <div class="proj-card reveal d2" style="border-style:dashed;opacity:0.55;">
+                <div class="proj-num">Project / 04</div>
+                <div class="proj-name" data-i18n="proj.p4.name">Your project</div>
+                <p class="proj-desc" data-i18n="proj.p4.desc">You can add your personal project here anytime.</p>
+                <div class="proj-stack">
+                    <span class="stack-tag" style="color:#64748b;border-color:#1e2d45" data-i18n="proj.p4.tag">Coming soon</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+    <div class="wrap">
+        <div class="skills-layout">
+            <div class="skills-intro">
+                <p class="label reveal" data-i18n="skills.label">Stack</p>
+                <h2 class="sec-title reveal" data-i18n="skills.title">What I use</h2>
+                <p class="reveal" data-i18n="skills.desc">From backend infrastructure to deployment — I can handle every layer of the stack.</p>
+            </div>
+            <div class="skills-groups">
+                <div class="sg reveal">
+                    <div class="sg-head"><span class="sg-icon">🐘</span><span data-i18n="skills.g1">Backend</span></div>
+                    <div class="sg-chips">
+                        <span class="chip">PHP 8</span><span class="chip">Laravel</span><span class="chip">REST API</span>
+                        <span class="chip">Sanctum / JWT</span><span class="chip">Laravel Queue</span>
+                    </div>
+                </div>
+                <div class="sg reveal d1">
+                    <div class="sg-head"><span class="sg-icon">🗄️</span><span data-i18n="skills.g2">Database</span></div>
+                    <div class="sg-chips">
+                        <span class="chip">MySQL</span><span class="chip">PostgreSQL</span><span class="chip">Redis</span>
+                        <span class="chip">Eloquent ORM</span><span class="chip">Query Builder</span>
+                    </div>
+                </div>
+                <div class="sg reveal d2">
+                    <div class="sg-head"><span class="sg-icon">🚀</span><span data-i18n="skills.g3">DevOps & Tools</span></div>
+                    <div class="sg-chips">
+                        <span class="chip">Docker</span><span class="chip">Nginx</span><span class="chip">Linux</span>
+                        <span class="chip">Git</span><span class="chip">CI/CD</span><span class="chip">Composer</span>
+                    </div>
+                </div>
+                <div class="sg reveal d3">
+                    <div class="sg-head"><span class="sg-icon">💳</span><span data-i18n="skills.g4">Fintech / Integrations</span></div>
+                    <div class="sg-chips">
+                        <span class="chip">Payment API</span><span class="chip">Webhook</span>
+                        <span class="chip">Telegram API</span><span class="chip">OAuth 2.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="wrap">
+        <p class="label reveal" data-i18n="contact.label">Contact</p>
+        <h2 class="sec-title reveal" data-i18n="contact.title">Find me on</h2>
+        <div class="contact-inner">
+            <p class="reveal" data-i18n="contact.desc">You can find me on the following platforms.</p>
+            <div class="soc-grid">
+                <a href="https://github.com/abdukhalilovazim" class="soc-card reveal">
+                    <div class="soc-card-icon">⚙️</div>
+                    <div><span class="soc-card-label">GitHub</span><div class="soc-card-val">github.com/abdukhalilovazim</div></div>
+                </a>
+                <a href="https://t.me/abdukhalilovazim" class="soc-card reveal d1">
+                    <div class="soc-card-icon">✈️</div>
+                    <div><span class="soc-card-label">Telegram</span><div class="soc-card-val">@abdukhalilovazim</div></div>
+                </a>
+                <a href="https://linkedin.com/in/abdukhalilovazim" class="soc-card reveal d1">
+                    <div class="soc-card-icon">💼</div>
+                    <div><span class="soc-card-label">LinkedIn</span><div class="soc-card-val">linkedin.com/in/abdukhalilovazim</div></div>
+                </a>
+                <a href="mailto:abdukhalilovazim@gmail.com" class="soc-card reveal d2">
+                    <div class="soc-card-icon">✉️</div>
+                    <div><span class="soc-card-label">Email</span><div class="soc-card-val">abdukhalilovazim@gmail.com</div></div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="footer-bar">
+    <div class="footer-inner">
+        <span>Abdukhalilov Azim — PHP Backend Developer</span>
+        <span>Samarkand, Uzbekistan 🇺🇿</span>
+    </div>
+</div>
+
+<script>
+    // ═══════════════════════════════════════════
+    //  TRANSLATIONS
+    // ═══════════════════════════════════════════
+    const translations = {
+        en: {
+            'nav.experience': 'Experience',
+            'nav.projects':   'Projects',
+            'nav.skills':     'Stack',
+            'nav.contact':    'Contact',
+
+            'hero.desc': 'Working at TEZPAY payment platform for 3+ years. Experienced in backend systems, API architecture and fintech.',
+
+            'stats.experience':   'Years exp.',
+            'stats.transactions': 'Transactions',
+            'stats.projects':     'Projects',
+            'stats.uptime':       'Uptime',
+
+            'exp.label': 'Work Experience',
+            'exp.title': "Where I've worked",
+            'exp.date':  '2024 — Present',
+            'exp.badge': '3+ years',
+            'exp.role':  'Backend Developer',
+            'exp.item1': 'Designed and deployed high-performance payment APIs handling millions of daily transactions',
+            'exp.item2': 'Built and optimized Laravel-based microservice architecture',
+            'exp.item3': 'Implemented Redis cache and queue systems, significantly improving API response times',
+            'exp.item4': 'Integrated third-party payment systems — banks and mobile operators',
+            'exp.item5': 'Optimized MySQL database performance and indexing strategies',
+            'exp.item6': 'Automated deployment pipeline with Docker and CI/CD',
+
+            'proj.label':    'Projects',
+            'proj.title':    "What I've built",
+            'proj.p1.name':  'Payment Gateway',
+            'proj.p1.desc':  'Multi-currency payment processing API with webhook support, retry queue and transaction logging.',
+            'proj.p2.name':  'Admin Panel + CRM',
+            'proj.p2.desc':  'Full-featured admin panel for managing clients, payments and reports with role-based access control.',
+            'proj.p3.name':  'Telegram Bot Backend',
+            'proj.p3.desc':  'Full backend API for a Telegram bot handling payments and notifications via webhooks.',
+            'proj.p4.name':  'Your project',
+            'proj.p4.desc':  'You can add your personal project here anytime.',
+            'proj.p4.tag':   'Coming soon',
+
+            'skills.label': 'Stack',
+            'skills.title': 'What I use',
+            'skills.desc':  'From backend infrastructure to deployment — I can handle every layer of the stack.',
+            'skills.g1':    'Backend',
+            'skills.g2':    'Database',
+            'skills.g3':    'DevOps & Tools',
+            'skills.g4':    'Fintech / Integrations',
+
+            'contact.label': 'Contact',
+            'contact.title': 'Find me on',
+            'contact.desc':  'You can find me on the following platforms.',
+        },
+
+        uz: {
+            'nav.experience': 'Tajriba',
+            'nav.projects':   'Loyihalar',
+            'nav.skills':     'Stack',
+            'nav.contact':    'Aloqa',
+
+            'hero.desc': 'TEZPAY to\'lov platformasida 2 yildan beri ishlayapman. Backend tizimlar, API arxitekturasi va fintech sohasida tajribam bor.',
+
+            'stats.experience':   'Yil tajriba',
+            'stats.transactions': 'Tranzaksiyalar',
+            'stats.projects':     'Loyihalar',
+            'stats.uptime':       'Uptime',
+
+            'exp.label': 'Ish tajribasi',
+            'exp.title': 'Qayerda ishlagan edim',
+            'exp.date':  '2024 — Hozir',
+            'exp.badge': '3+ yil',
+            'exp.role':  'Backend Developer',
+            'exp.item1': 'Millionlab tranzaksiyalarni qayta ishlovchi yuqori unumli to\'lov API-larini loyihalash va ishga tushirish',
+            'exp.item2': 'Laravel asosidagi mikroservis arxitekturasini qurish va optimallashtirish',
+            'exp.item3': 'Redis cache va queue tizimlarini joriy etib, API javob vaqtini sezilarli tezlashtirish',
+            'exp.item4': 'Uchinchi tomon to\'lov tizimlari — bank va mobil operatorlar bilan integratsiya',
+            'exp.item5': 'MySQL ma\'lumotlar bazasini optimallashtirish va indekslash',
+            'exp.item6': 'Docker orqali deploy jarayonini avtomatlashtirish',
+
+            'proj.label':    'Shaxsiy loyihalar',
+            'proj.title':    'Nima yasadim',
+            'proj.p1.name':  'To\'lov Gateway',
+            'proj.p1.desc':  'Ko\'p valyutali to\'lovlarni qayta ishlovchi API. Webhook, retry queue va tranzaksiya logi bilan.',
+            'proj.p2.name':  'Admin Panel + CRM',
+            'proj.p2.desc':  'Mijozlar, to\'lovlar va hisobotlarni boshqarish uchun to\'liq admin panel. Role-based access bilan.',
+            'proj.p3.name':  'Telegram Bot Backend',
+            'proj.p3.desc':  'Telegram orqali to\'lov va bildirishnomalar yuboruvchi bot uchun to\'liq backend API.',
+            'proj.p4.name':  'Sizning loyihangiz',
+            'proj.p4.desc':  'Bu yerga o\'zingizning kichik loyihangizni qo\'shishingiz mumkin.',
+            'proj.p4.tag':   'Tez orada',
+
+            'skills.label': 'Stack',
+            'skills.title': 'Nima ishlataман',
+            'skills.desc':  'Backend infratuzilmadan tortib deploy gacha — barcha bosqichda ishlay olaman.',
+            'skills.g1':    'Backend',
+            'skills.g2':    'Ma\'lumotlar bazasi',
+            'skills.g3':    'DevOps & Toollar',
+            'skills.g4':    'Fintech / Integratsiyalar',
+
+            'contact.label': 'Aloqa',
+            'contact.title': 'Topish mumkin',
+            'contact.desc':  'Meni quyidagi tarmoqlarda topishingiz mumkin.',
+        },
+
+        ru: {
+            'nav.experience': 'Опыт',
+            'nav.projects':   'Проекты',
+            'nav.skills':     'Стек',
+            'nav.contact':    'Контакты',
+
+            'hero.desc': 'Работаю в платёжной платформе TEZPAY более 2 лет. Опыт в backend-системах, архитектуре API и fintech.',
+
+            'stats.experience':   'Лет опыта',
+            'stats.transactions': 'Транзакций',
+            'stats.projects':     'Проектов',
+            'stats.uptime':       'Аптайм',
+
+            'exp.label': 'Опыт работы',
+            'exp.title': 'Где я работал',
+            'exp.date':  '2024 — Сейчас',
+            'exp.badge': '3+ года',
+            'exp.role':  'Backend Developer',
+            'exp.item1': 'Проектирование и запуск высоконагруженных платёжных API, обрабатывающих миллионы транзакций',
+            'exp.item2': 'Построение и оптимизация микросервисной архитектуры на Laravel',
+            'exp.item3': 'Внедрение Redis кэша и очередей, значительное ускорение ответов API',
+            'exp.item4': 'Интеграция сторонних платёжных систем — банки и мобильные операторы',
+            'exp.item5': 'Оптимизация производительности MySQL и стратегии индексирования',
+            'exp.item6': 'Автоматизация деплоя через Docker и CI/CD',
+
+            'proj.label':    'Проекты',
+            'proj.title':    'Что я создал',
+            'proj.p1.name':  'Платёжный шлюз',
+            'proj.p1.desc':  'API для обработки мультивалютных платежей с поддержкой webhook, retry-очереди и логированием транзакций.',
+            'proj.p2.name':  'Admin Panel + CRM',
+            'proj.p2.desc':  'Полнофункциональная панель управления клиентами, платежами и отчётами с ролевым доступом.',
+            'proj.p3.name':  'Backend для Telegram-бота',
+            'proj.p3.desc':  'Полный backend API для Telegram-бота с платежами и уведомлениями через webhook.',
+            'proj.p4.name':  'Ваш проект',
+            'proj.p4.desc':  'Здесь вы можете добавить свой личный проект в любое время.',
+            'proj.p4.tag':   'Скоро',
+
+            'skills.label': 'Стек',
+            'skills.title': 'Что использую',
+            'skills.desc':  'От backend-инфраструктуры до деплоя — могу работать на каждом уровне стека.',
+            'skills.g1':    'Backend',
+            'skills.g2':    'Базы данных',
+            'skills.g3':    'DevOps & Инструменты',
+            'skills.g4':    'Fintech / Интеграции',
+
+            'contact.label': 'Контакты',
+            'contact.title': 'Найти меня',
+            'contact.desc':  'Вы можете найти меня на следующих платформах.',
+        }
+    };
+
+    // ═══════════════════════════════════════════
+    //  LANGUAGE ENGINE
+    // ═══════════════════════════════════════════
+    let currentLang = 'en';
+
+    function setLang(lang) {
+        if (lang === currentLang) return;
+        currentLang = lang;
+
+        // Update buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+        });
+
+        // Fade out
+        const els = document.querySelectorAll('[data-i18n]');
+        els.forEach(el => el.classList.add('lang-fade'));
+
+        setTimeout(() => {
+            els.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const t = translations[lang];
+                if (t && t[key]) el.textContent = t[key];
+            });
+
+            // html lang attr
+            document.documentElement.lang = lang;
+
+            // Fade in
+            els.forEach(el => el.classList.remove('lang-fade'));
+        }, 150);
+    }
+
+    // ═══════════════════════════════════════════
+    //  SCROLL REVEAL
+    // ═══════════════════════════════════════════
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Active nav
+    window.addEventListener('scroll', () => {
+        let cur = '';
+        document.querySelectorAll('section[id]').forEach(s => {
+            if (window.scrollY >= s.offsetTop - 250) cur = s.id;
+        });
+        document.querySelectorAll('nav a').forEach(a => {
+            a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
+        });
+    });
+</script>
+</body>
+</html>
